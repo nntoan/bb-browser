@@ -1,8 +1,8 @@
 /**
- * dialog 命令 - 处理浏览器dialog (alert/confirm/prompt）
- * 用法：
- *   bb-browser dialog accept [text]  接受对话框，可传入 prompt 文本
- *   bb-browser dialog dismiss        拒绝/关闭对话框
+ * dialog command - handle browser dialogs (alert/confirm/prompt)
+ * Usage:
+ *   bb-browser dialog accept [text]  accept dialog, optionally with prompt text
+ *   bb-browser dialog dismiss        dismiss/close dialog
  */
 
 import { generateId, type Request, type Response } from "@bb-browser/shared";
@@ -47,7 +47,7 @@ export async function dialogCommand(
       const dialogInfo = response.data?.dialogInfo;
       if (dialogInfo) {
         const action = subCommand === "accept" ? "Accepted " : "Dismissed ";
-        console.log(`${action}dialog (${dialogInfo.type} ): "${dialogInfo.message}"`);
+        console.log(`${action}dialog (${dialogInfo.type}): "${dialogInfo.message}"`);
       } else {
         console.log("Dialog handled");
       }

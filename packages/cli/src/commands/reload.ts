@@ -28,7 +28,7 @@ export async function reloadCommand(
     }
     const list = await listRes.json();
     
-    // Found chrome://extensions 页面
+    // Find chrome://extensions page
     const extPage = list.find((t: any) => 
       t.type === "page" && 
       t.url.includes("chrome://extensions")

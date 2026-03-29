@@ -15,7 +15,7 @@ export interface WaitOptions {
 }
 
 /**
- * 判断yesnoyes等待时间（纯数字）
+ * Check whether target is a time wait value (digits only)
  */
 function isTimeWait(target: string): boolean {
   return /^\d+$/.test(target);

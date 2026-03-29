@@ -6,11 +6,11 @@
  *   bb-browser site search <query>            搜索
  *   bb-browser site <name> [args...]          运行（简写）
  *   bb-browser site run <name> [args...]      运行
- *   bb-browser site update                    更新Community adapters 库
+ *   bb-browser site update                    Update community adapter repository
  *
  * 目录：
  *   ~/.bb-browser/sites/       Private adapters (preferred)
- *   ~/.bb-browser/bb-sites/    Community adapters（bb-browser site update 拉取）
+ *   ~/.bb-browser/bb-sites/    Community adapters (pulled by bb-browser site update)
  */
 
 import { generateId, type Request, type Response, type TabInfo } from "@bb-browser/shared";
@@ -178,7 +178,7 @@ function scanSites(dir: string, source: "local" | "community"): SiteMeta[] {
 }
 
 /**
- * 根据 URL 检查yesno有对应的 site adapter，返回提示文本
+ * Check site adapters for a URL and return a usage hint
  */
 export function getSiteHintForDomain(url: string): string | null {
   try {
@@ -712,7 +712,7 @@ async function siteRun(
   if (typeof parsed === "object" && parsed !== null && "error" in parsed) {
     const errObj = parsed as { error: string; hint?: string };
 
-    // 检测yesno为登录问题（检查 error 和 hint 文本）
+    // Detect whether this is an authentication issue (check error and hint text)
     const checkText = `${errObj.error} ${errObj.hint || ""}`;
     const isAuthError = /401|403|unauthorized|forbidden|not.?logged|login.?required|sign.?in|auth/i.test(checkText);
     const loginHint = isAuthError && site.domain
@@ -827,7 +827,7 @@ Contribute to community: https://github.com/epiral/bb-sites`);
       break;
   }
 
-  // 静默后台更新Community adapters
+  // Silent background update of community adapters
   silentUpdate();
 }
 

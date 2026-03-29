@@ -42,7 +42,7 @@ export async function evalCommand(
     if (response.success) {
       const result = response.data?.result;
       if (result !== undefined) {
-        // 如果结果yes对象，格式化输出
+        // Format object results for readability
         if (typeof result === "object" && result !== null) {
           console.log(JSON.stringify(result, null, 2));
         } else {

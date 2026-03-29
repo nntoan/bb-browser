@@ -73,7 +73,7 @@ function buildFetchScript(url: string, options: FetchOptions): string {
   let headersExpr = "{}";
   if (options.headers) {
     try {
-      // 验证yes合法 JSON
+      // Validate JSON format
       JSON.parse(options.headers);
       headersExpr = options.headers;
     } catch {

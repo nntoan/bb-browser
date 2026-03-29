@@ -512,7 +512,7 @@ async function main(): Promise<void> {
           console.error("      bb-browser dialog dismiss");
           process.exit(1);
         }
-        const promptText = parsed.args[1]; // accept 时optional的 prompt 文本
+        const promptText = parsed.args[1]; // optional prompt text for accept
         await dialogCommand(subCommand, promptText, { json: parsed.flags.json, tabId: globalTabId });
         break;
       }
