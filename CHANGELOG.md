@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/nntoan/bb-browser/compare/bb-browser-v0.11.0...bb-browser-v0.12.0) (2026-03-29)
+
+
+### Features
+
+* **release:** Change npm publish command to use --public flag ([a170e32](https://github.com/nntoan/bb-browser/commit/a170e327b292f52b11067edd81f00fd2ab97c943))
+
 ## [0.11.0](https://github.com/nntoan/bb-browser/compare/bb-browser-v0.10.0...bb-browser-v0.11.0) (2026-03-29)
 
 
