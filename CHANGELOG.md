@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/nntoan/bb-browser/compare/bb-browser-v0.12.0...bb-browser-v0.13.0) (2026-03-29)
+
+
+### Features
+
+* **release:** Change npm publish command to use --access=public ([9648a0e](https://github.com/nntoan/bb-browser/commit/9648a0ea92e3e25c72bf92f834a51a371b3c4e09))
+
 ## [0.12.0](https://github.com/nntoan/bb-browser/compare/bb-browser-v0.11.0...bb-browser-v0.12.0) (2026-03-29)
 
 
