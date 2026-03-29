@@ -191,6 +191,26 @@ bb-browser CLI ──HTTP──▶ Daemon ──SSE──▶ Chrome Extension
                                          Your Real Browser
 ```
 
+## Fork sync strategy for English-localized forks
+
+If your fork keeps English runtime text while upstream still updates Chinese text, avoid direct long-lived manual edits during every sync.
+
+This repo includes an overlay-based approach:
+
+1. Merge upstream first.
+2. Re-apply English string overlay (`pnpm overlay:english`).
+3. Validate (`pnpm lint && pnpm test`).
+4. Push sync result.
+
+The overlay rules live in:
+- `tools/english-overlay/rules.json`
+- `tools/english-overlay/apply.mjs`
+
+For automation, use workflow:
+- `.github/workflows/sync-upstream-overlay.yml`
+
+This reduces merge conflicts because your localization is generated after merge, not hand-resolved in every conflicting hunk.
+
 ## License
 
 [MIT](LICENSE)
