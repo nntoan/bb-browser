@@ -1,5 +1,5 @@
 {
-  "name": "bb-browser",
+  "name": "@nntoan/bb-browser",
   "version": "0.11.0",
   "description": "Your browser is the API. CLI + MCP server for AI agents to control Chrome with your login state.",
   "type": "module",
@@ -45,9 +45,9 @@
     "url": "git+https://github.com/epiral/bb-browser.git"
   },
   "bugs": {
-    "url": "https://github.com/epiral/bb-browser/issues"
+    "url": "https://github.com/nntoan/bb-browser/issues"
   },
-  "homepage": "https://github.com/epiral/bb-browser#readme",
+  "homepage": "https://github.com/nntoan/bb-browser#readme",
   "engines": {
     "node": ">=18.0.0"
   },
