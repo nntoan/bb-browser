@@ -55,7 +55,7 @@ async function ensureTabForOrigin(origin: string, hostname: string): Promise<num
 
   const newResp: Response = await sendCommand({ id: generateId(), action: "tab_new", url: origin });
   if (!newResp.success) {
-    throw new Error(`无法打开 ${origin}: ${newResp.error}`);
+    throw new Error(`Unable to open ${origin}: ${newResp.error}`);
   }
   await new Promise((resolve) => setTimeout(resolve, 3000));
   return newResp.data?.tabId;
@@ -73,7 +73,7 @@ function buildFetchScript(url: string, options: FetchOptions): string {
   let headersExpr = "{}";
   if (options.headers) {
     try {
-      // 验证是合法 JSON
+      // Validate JSON format
       JSON.parse(options.headers);
       headersExpr = options.headers;
     } catch {
@@ -112,9 +112,9 @@ export async function fetchCommand(
 ): Promise<void> {
   if (!url) {
     throw new Error(
-      "缺少 URL 参数\n" +
-      "  用法: bb-browser fetch <url> [--json] [--method POST] [--body '{...}']\n" +
-      "  示例: bb-browser fetch https://www.reddit.com/api/me.json --json"
+      "Missing URL argument\n" +
+      "  Usage: bb-browser fetch <url> [--json] [--method POST] [--body '{...}']\n" +
+      "  Example: bb-browser fetch https://www.reddit.com/api/me.json --json"
     );
   }
 
@@ -131,7 +131,7 @@ export async function fetchCommand(
       origin = parsed.origin;
       hostname = parsed.hostname;
     } catch {
-      throw new Error(`无效的 URL: ${url}`);
+      throw new Error(`Invalid URL: ${url}`);
     }
 
     if (!targetTabId) {
@@ -144,12 +144,12 @@ export async function fetchCommand(
   const evalResp: Response = await sendCommand(evalReq);
 
   if (!evalResp.success) {
-    throw new Error(`Fetch 失败: ${evalResp.error}`);
+    throw new Error(`Fetch failed: ${evalResp.error}`);
   }
 
   const rawResult = evalResp.data?.result;
   if (rawResult === undefined || rawResult === null) {
-    throw new Error("Fetch 未返回结果");
+    throw new Error("Fetch returned no result");
   }
 
   let result: { status?: number; contentType?: string; body?: unknown; error?: string };
@@ -171,7 +171,7 @@ export async function fetchCommand(
       ? JSON.stringify(result.body, null, 2)
       : String(result.body);
     writeFileSync(options.output, content, "utf-8");
-    console.log(`已写入 ${options.output} (${result.status}, ${content.length} bytes)`);
+    console.log(`Written to ${options.output} (${result.status}, ${content.length} bytes)`);
     return;
   }
 

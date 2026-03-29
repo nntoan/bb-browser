@@ -24,18 +24,18 @@ export async function reloadCommand(
     // 获取所有 targets
     const listRes = await fetch(`http://127.0.0.1:${port}/json/list`);
     if (!listRes.ok) {
-      throw new Error(`CDP 未启用。请用 --remote-debugging-port=${port} 启动 Chrome`);
+      throw new Error(`CDP is not enabled. Start Chrome with --remote-debugging-port=${port}`);
     }
     const list = await listRes.json();
     
-    // 找到 chrome://extensions 页面
+    // Find chrome://extensions page
     const extPage = list.find((t: any) => 
       t.type === "page" && 
       t.url.includes("chrome://extensions")
     );
     
     if (!extPage) {
-      throw new Error("请先打开 chrome://extensions 页面");
+      throw new Error("Please open chrome://extensions first");
     }
     
     // 连接到 chrome://extensions 页面
@@ -47,7 +47,7 @@ export async function reloadCommand(
         if (!resolved) {
           resolved = true;
           ws.close();
-          reject(new Error("CDP 连接超时"));
+          reject(new Error("CDP connection timed out"));
         }
       }, 10000);
       
@@ -64,11 +64,11 @@ export async function reloadCommand(
               const bbExt = exts.find(e => e.name === '${EXTENSION_NAME}');
               
               if (!bbExt) {
-                return { error: '${EXTENSION_NAME} 扩展未安装' };
+                return { error: '${EXTENSION_NAME} extension is not installed' };
               }
               
               if (bbExt.state !== 'ENABLED') {
-                return { error: '${EXTENSION_NAME} 扩展已禁用' };
+                return { error: '${EXTENSION_NAME} extension is disabled' };
               }
               
               await chrome.developerPrivate.reload(bbExt.id, {failQuietly: true});
@@ -102,13 +102,13 @@ export async function reloadCommand(
           if (value?.success) {
             resolve({ 
               success: true, 
-              message: "扩展已重载",
+              message: "Extension reloaded",
               extensionId: value.extensionId 
             });
           } else if (value?.error) {
             reject(new Error(value.error));
           } else {
-            reject(new Error(`重载失败: ${JSON.stringify(value)}`));
+            reject(new Error(`Reload failed: ${JSON.stringify(value)}`));
           }
         }
       });
@@ -117,7 +117,7 @@ export async function reloadCommand(
         clearTimeout(timeout);
         if (!resolved) {
           resolved = true;
-          reject(new Error(`CDP 连接失败: ${err.message}`));
+          reject(new Error(`CDP connection failed: ${err.message}`));
         }
       });
     });
@@ -134,7 +134,7 @@ export async function reloadCommand(
     if (options.json) {
       console.log(JSON.stringify({ success: false, error: message }));
     } else {
-      console.error(`错误: ${message}`);
+      console.error(`Error: ${message}`);
     }
     process.exit(1);
   }

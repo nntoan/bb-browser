@@ -33,12 +33,12 @@ export async function closeCommand(options: CloseOptions = {}): Promise<void> {
     if (response.success) {
       const title = response.data?.title ?? "";
       if (title) {
-        console.log(`已关闭: "${title}"`);
+        console.log(`Closed: "${title}"`);
       } else {
-        console.log("已关闭当前标签页");
+        console.log("Closed current tab");
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

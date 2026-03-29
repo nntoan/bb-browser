@@ -1,0 +1,90 @@
+name: Sync Upstream + English Overlay
+
+on:
+  workflow_dispatch:
+    inputs:
+      upstream_repo:
+        description: "Upstream repository (owner/name)"
+        required: false
+        default: "epiral/bb-browser"
+        type: string
+      upstream_branch:
+        description: "Upstream branch"
+        required: false
+        default: "main"
+        type: string
+  schedule:
+    - cron: "0 3 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Configure upstream remote
+        run: |
+          git remote add upstream "https://github.com/${{ inputs.upstream_repo || 'epiral/bb-browser' }}.git" || true
+          git fetch upstream
+
+      - name: Merge upstream
+        run: |
+          BRANCH="${{ inputs.upstream_branch || 'main' }}"
+          git merge --no-edit "upstream/${BRANCH}" || {
+            echo "Merge conflict detected."
+            echo "Resolve locally with:"
+            echo "  git fetch upstream"
+            echo "  git merge upstream/${BRANCH}"
+            echo "  # resolve conflicts, then:"
+            echo "  pnpm overlay:english && pnpm lint && pnpm test"
+            echo "  git add . && git commit && git push"
+            exit 1
+          }
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Re-apply English overlay
+        run: pnpm overlay:english
+
+      - name: Validate lint
+        run: pnpm lint
+
+      - name: Validate tests
+        run: pnpm test
+
+      - name: Commit if changed
+        id: commit
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore(sync): merge upstream and re-apply english overlay"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Push branch
+        if: steps.commit.outputs.changed == 'true'
+        run: git push origin HEAD

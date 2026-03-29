@@ -30,11 +30,11 @@ export async function fillCommand(
 ): Promise<void> {
   // 验证参数
   if (!ref) {
-    throw new Error("缺少 ref 参数");
+    throw new Error("Missing ref argument");
   }
 
   if (text === undefined || text === null) {
-    throw new Error("缺少 text 参数");
+    throw new Error("Missing text argument");
   }
 
   // 确保 Daemon 运行
@@ -63,13 +63,13 @@ export async function fillCommand(
       const role = response.data?.role ?? "element";
       const name = response.data?.name;
       if (name) {
-        console.log(`已填充: ${role} "${name}"`);
+        console.log(`Filled: ${role} "${name}"`);
       } else {
-        console.log(`已填充: ${role}`);
+        console.log(`Filled: ${role}`);
       }
-      console.log(`内容: "${text}"`);
+      console.log(`Content: "${text}"`);
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

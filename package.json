@@ -18,6 +18,7 @@
     "build": "turbo run build && pnpm build:release",
     "build:release": "tsup && pnpm build:extension",
     "build:extension": "rm -rf extension && cp -r packages/extension/dist extension",
+    "overlay:english": "node tools/english-overlay/apply.mjs",
     "dev": "turbo run dev",
     "test": "turbo run test",
     "lint": "turbo run lint",

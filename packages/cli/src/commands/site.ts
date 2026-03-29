@@ -6,11 +6,11 @@
  *   bb-browser site search <query>            搜索
  *   bb-browser site <name> [args...]          运行（简写）
  *   bb-browser site run <name> [args...]      运行
- *   bb-browser site update                    更新社区 adapter 库
+ *   bb-browser site update                    Update community adapter repository
  *
  * 目录：
- *   ~/.bb-browser/sites/       私有 adapter（优先）
- *   ~/.bb-browser/bb-sites/    社区 adapter（bb-browser site update 拉取）
+ *   ~/.bb-browser/sites/       Private adapters (preferred)
+ *   ~/.bb-browser/bb-sites/    Community adapters (pulled by bb-browser site update)
  */
 
 import { generateId, type Request, type Response, type TabInfo } from "@bb-browser/shared";
@@ -178,7 +178,7 @@ function scanSites(dir: string, source: "local" | "community"): SiteMeta[] {
 }
 
 /**
- * 根据 URL 检查是否有对应的 site adapter，返回提示文本
+ * Check site adapters for a URL and return a usage hint
  */
 export function getSiteHintForDomain(url: string): string | null {
   try {
@@ -188,7 +188,7 @@ export function getSiteHintForDomain(url: string): string | null {
     if (matched.length === 0) return null;
     const names = matched.map(s => s.name);
     const example = matched[0].example || `bb-browser site ${names[0]}`;
-    return `该网站有 ${names.length} 个 site adapter 可直接获取数据，无需手动操作浏览器。试试: ${example}`;
+    return `This website has ${names.length} site adapters for direct data access. Try: ${example}`;
   } catch {
     return null;
   }
@@ -230,9 +230,9 @@ function siteList(options: SiteOptions): void {
       console.log("[]");
       return;
     }
-    console.log("未找到任何 site adapter。");
-    console.log("  安装社区 adapter: bb-browser site update");
-    console.log(`  私有 adapter 目录: ${LOCAL_SITES_DIR}`);
+    console.log("No site adapters found.");
+    console.log("  Install community adapters: bb-browser site update");
+    console.log(`  Private adapter directory: ${LOCAL_SITES_DIR}`);
     return;
   }
 
@@ -277,8 +277,8 @@ function siteSearch(query: string, options: SiteOptions): void {
       console.log("[]");
       return;
     }
-    console.log(`未找到匹配 "${query}" 的 adapter。`);
-    console.log("  查看所有: bb-browser site list");
+    console.log(`No adapters matching "${query}" were found.`);
+    console.log("  View all: bb-browser site list");
     return;
   }
 
@@ -301,44 +301,44 @@ function siteUpdate(options: SiteOptions = {}): void {
 
   if (updateMode === "pull") {
     if (!options.json) {
-      console.log("更新社区 site adapter 库...");
+      console.log("Updating community site adapter repository...");
     }
     try {
       execSync("git pull --ff-only", { cwd: COMMUNITY_SITES_DIR, stdio: "pipe" });
       if (!options.json) {
-        console.log("更新完成。");
+        console.log("Update complete.");
         console.log("");
-        console.log("💡 运行 bb-browser site recommend 看看哪些和你的浏览习惯匹配");
+        console.log("💡 Run bb-browser site recommend to discover adapters matching your browsing habits");
       }
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
       const manualAction = "cd ~/.bb-browser/bb-sites && git pull";
       if (options.json) {
-        exitJsonError(`更新失败: ${message}`, { action: manualAction, updateMode });
+        exitJsonError(`Update failed: ${message}`, { action: manualAction, updateMode });
       }
-      console.error(`更新失败: ${e instanceof Error ? e.message : e}`);
-      console.error("  手动修复: cd ~/.bb-browser/bb-sites && git pull");
+      console.error(`Update failed: ${e instanceof Error ? e.message : e}`);
+      console.error("  Manual fix: cd ~/.bb-browser/bb-sites && git pull");
       process.exit(1);
     }
   } else {
     if (!options.json) {
-      console.log(`克隆社区 adapter 库: ${COMMUNITY_REPO}`);
+      console.log(`Cloning community adapter repository: ${COMMUNITY_REPO}`);
     }
     try {
       execSync(`git clone ${COMMUNITY_REPO} ${COMMUNITY_SITES_DIR}`, { stdio: "pipe" });
       if (!options.json) {
-        console.log("克隆完成。");
+        console.log("Clone complete.");
         console.log("");
-        console.log("💡 运行 bb-browser site recommend 看看哪些和你的浏览习惯匹配");
+        console.log("💡 Run bb-browser site recommend to discover adapters matching your browsing habits");
       }
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
       const manualAction = `git clone ${COMMUNITY_REPO} ~/.bb-browser/bb-sites`;
       if (options.json) {
-        exitJsonError(`克隆失败: ${message}`, { action: manualAction, updateMode });
+        exitJsonError(`Clone failed: ${message}`, { action: manualAction, updateMode });
       }
-      console.error(`克隆失败: ${e instanceof Error ? e.message : e}`);
-      console.error(`  手动修复: git clone ${COMMUNITY_REPO} ~/.bb-browser/bb-sites`);
+      console.error(`Clone failed: ${e instanceof Error ? e.message : e}`);
+      console.error(`  Manual fix: git clone ${COMMUNITY_REPO} ~/.bb-browser/bb-sites`);
       process.exit(1);
     }
   }
@@ -355,7 +355,7 @@ function siteUpdate(options: SiteOptions = {}): void {
     return;
   }
 
-  console.log(`已安装 ${sites.length} 个社区 adapter。`);
+  console.log(`Installed ${sites.length} community adapters.`);
   console.log(`⭐ Like bb-browser? → bb-browser star`);
 
   // Check for CLI updates
@@ -394,25 +394,25 @@ function siteInfo(name: string, options: SiteOptions): void {
 
   console.log(`${site.name} — ${site.description}`);
   console.log();
-  console.log("参数：");
+  console.log("Arguments:");
 
   const argEntries = Object.entries(site.args);
   if (argEntries.length === 0) {
-    console.log("  （无）");
+    console.log("  (none)");
   } else {
     for (const [argName, argDef] of argEntries) {
-      const requiredText = argDef.required ? "必填" : "可选";
+      const requiredText = argDef.required ? "required" : "optional";
       const description = argDef.description || "";
       console.log(`  ${argName} (${requiredText})    ${description}`.trimEnd());
     }
   }
 
   console.log();
-  console.log("示例：");
+  console.log("Example:");
   console.log(`  ${site.example || `bb-browser site ${site.name}`}`);
   console.log();
-  console.log(`域名：${site.domain || "（未声明）"}`);
-  console.log(`只读：${site.readOnly ? "是" : "否"}`);
+  console.log(`Domain: ${site.domain || "(not declared)"}`);
+  console.log(`Read-only: ${site.readOnly ? "yes" : "no"}`);
 }
 
 async function siteRecommend(options: SiteOptions): Promise<void> {
@@ -466,35 +466,35 @@ async function siteRecommend(options: SiteOptions): Promise<void> {
     return;
   }
 
-  console.log(`基于你最近 ${days} 天的浏览记录：`);
+  console.log(`Based on your recent ${days} days of browsing history:`);
   console.log();
 
-  console.log("🎯 你常用这些网站，可以直接用：");
+  console.log("🎯 Frequently used sites with available adapters:");
   console.log();
   if (available.length === 0) {
-    console.log("  （暂无匹配的 adapter）");
+    console.log("  (no matching adapters yet)");
   } else {
     for (const item of available) {
-      console.log(`  ${item.domain.padEnd(20)} ${item.visits} 次访问    ${item.adapterCount} 个命令`);
-      console.log(`    试试: ${item.adapters[0]?.example || `bb-browser site ${item.adapters[0]?.name || ""}`}`);
+      console.log(`  ${item.domain.padEnd(20)} ${item.visits} visits    ${item.adapterCount} commands`);
+      console.log(`    Try: ${item.adapters[0]?.example || `bb-browser site ${item.adapters[0]?.name || ""}`}`);
       console.log();
     }
   }
 
-  console.log("📋 你常用但还没有 adapter：");
+  console.log("📋 Frequently used sites without adapters:");
   console.log();
   if (notAvailable.length === 0) {
-    console.log("  （暂无）");
+    console.log("  (none)");
   } else {
     for (const item of notAvailable) {
-      console.log(`  ${item.domain.padEnd(20)} ${item.visits} 次访问`);
+      console.log(`  ${item.domain.padEnd(20)} ${item.visits} visits`);
     }
   }
 
   console.log();
-  console.log('💡 跟你的 AI Agent 说 "把 notion.so CLI 化"，它就能自动完成。');
+  console.log('💡 Tell your AI agent "turn notion.so into a CLI", and it can automate it.');
   console.log();
-  console.log(`所有分析纯本地完成。用 --days 7 只看最近一周。`);
+  console.log(`All analysis is done locally. Use --days 7 to view only the last week.`);
 }
 
 async function siteRun(
@@ -712,7 +712,7 @@ async function siteRun(
   if (typeof parsed === "object" && parsed !== null && "error" in parsed) {
     const errObj = parsed as { error: string; hint?: string };
 
-    // 检测是否为登录问题（检查 error 和 hint 文本）
+    // Detect whether this is an authentication issue (check error and hint text)
     const checkText = `${errObj.error} ${errObj.hint || ""}`;
     const isAuthError = /401|403|unauthorized|forbidden|not.?logged|login.?required|sign.?in|auth/i.test(checkText);
     const loginHint = isAuthError && site.domain
@@ -756,31 +756,31 @@ export async function siteCommand(
   const subCommand = args[0];
 
   if (!subCommand || subCommand === "--help" || subCommand === "-h") {
-    console.log(`bb-browser site - 网站 CLI 化（管理和运行 site adapter）
+    console.log(`bb-browser site - Website CLI adapter manager and runner
 
 用法:
-  bb-browser site list                      列出所有可用 adapter
-  bb-browser site info <name>               查看 adapter 元信息
-  bb-browser site recommend                 基于历史记录推荐 adapter
-  bb-browser site search <query>            搜索 adapter
-  bb-browser site <name> [args...]          运行 adapter（简写）
-  bb-browser site run <name> [args...]      运行 adapter
-  bb-browser site update                    更新社区 adapter 库 (git clone/pull)
+  bb-browser site list                      List all available adapters
+  bb-browser site info <name>               View adapter metadata
+  bb-browser site recommend                 Recommend adapters based on history
+  bb-browser site search <query>            Search adapters
+  bb-browser site <name> [args...]          Run adapter (shorthand)
+  bb-browser site run <name> [args...]      Run adapter
+  bb-browser site update                    Update community adapter repository (git clone/pull)
 
-目录:
-  ${LOCAL_SITES_DIR}      私有 adapter（优先）
-  ${COMMUNITY_SITES_DIR}   社区 adapter
+Directories:
+  ${LOCAL_SITES_DIR}      Private adapters (preferred)
+  ${COMMUNITY_SITES_DIR}   Community adapters
 
-示例:
+Examples:
   bb-browser site update
   bb-browser site list
   bb-browser site reddit/thread https://www.reddit.com/r/LocalLLaMA/comments/...
   bb-browser site twitter/user yan5xu
   bb-browser site search reddit
 
-创建新 adapter: bb-browser guide
-报告问题: gh issue create --repo epiral/bb-sites --title "[adapter-name] 描述"
-贡献社区: https://github.com/epiral/bb-sites`);
+Create a new adapter: bb-browser guide
+Report issues: gh issue create --repo epiral/bb-sites --title "[adapter-name] description"
+Contribute to community: https://github.com/epiral/bb-sites`);
     return;
   }
 
@@ -827,7 +827,7 @@ export async function siteCommand(
       break;
   }
 
-  // 静默后台更新社区 adapter
+  // Silent background update of community adapters
   silentUpdate();
 }
 

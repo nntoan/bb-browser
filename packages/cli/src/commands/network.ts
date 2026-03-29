@@ -47,30 +47,30 @@ export async function networkCommand(
     case "requests": {
       const requests = data?.networkRequests || [];
       if (requests.length === 0) {
-        console.log("没有网络请求记录");
-        console.log("提示: 使用 network requests 会自动开始监控");
+        console.log("No network requests recorded");
+        console.log("Tip: running network requests starts monitoring automatically");
       } else {
-        console.log(`网络请求 (${requests.length} 条):\n`);
+        console.log(`Network requests (${requests.length} items):\n`);
         for (const req of requests) {
           const status = req.failed 
             ? `FAILED (${req.failureReason})` 
             : (req.status ? `${req.status} ${req.statusText || ''}` : 'pending');
           console.log(`${req.method} ${req.url}`);
-          console.log(`  类型: ${req.type}, 状态: ${status}`);
+          console.log(`  Type: ${req.type}, Status: ${status}`);
           if (options.withBody) {
             const requestHeaderCount = req.requestHeaders ? Object.keys(req.requestHeaders).length : 0;
             const responseHeaderCount = req.responseHeaders ? Object.keys(req.responseHeaders).length : 0;
-            console.log(`  请求头: ${requestHeaderCount}, 响应头: ${responseHeaderCount}`);
+            console.log(`  Request headers: ${requestHeaderCount}, Response headers: ${responseHeaderCount}`);
             if (req.requestBody !== undefined) {
               const preview = req.requestBody.length > 200 ? `${req.requestBody.slice(0, 200)}...` : req.requestBody;
-              console.log(`  请求体: ${preview}`);
+              console.log(`  Request body: ${preview}`);
             }
             if (req.responseBody !== undefined) {
               const preview = req.responseBody.length > 200 ? `${req.responseBody.slice(0, 200)}...` : req.responseBody;
-              console.log(`  响应体: ${preview}`);
+              console.log(`  Response body: ${preview}`);
             }
             if (req.bodyError) {
-              console.log(`  Body错误: ${req.bodyError}`);
+              console.log(`  Body error: ${req.bodyError}`);
             }
           }
           console.log("");
@@ -80,34 +80,34 @@ export async function networkCommand(
     }
 
     case "route": {
-      console.log(`已添加拦截规则: ${urlOrFilter}`);
+      console.log(`Added route rule: ${urlOrFilter}`);
       if (options.abort) {
-        console.log("  行为: 阻止请求");
+        console.log("  Action: abort request");
       } else if (options.body) {
-        console.log("  行为: 返回 mock 数据");
+        console.log("  Action: return mock body");
       } else {
-        console.log("  行为: 继续请求");
+        console.log("  Action: continue request");
       }
-      console.log(`当前规则数: ${data?.routeCount || 0}`);
+      console.log(`Current rule count: ${data?.routeCount || 0}`);
       break;
     }
 
     case "unroute": {
       if (urlOrFilter) {
-        console.log(`已移除拦截规则: ${urlOrFilter}`);
+        console.log(`Removed route rule: ${urlOrFilter}`);
       } else {
-        console.log("已移除所有拦截规则");
+        console.log("Removed all route rules");
       }
-      console.log(`剩余规则数: ${data?.routeCount || 0}`);
+      console.log(`Remaining rule count: ${data?.routeCount || 0}`);
       break;
     }
 
     case "clear": {
-      console.log("已清空网络请求记录");
+      console.log("Cleared network request records");
       break;
     }
 
     default:
-      throw new Error(`未知的 network 子命令: ${subCommand}`);
+      throw new Error(`Unknown network subcommand: ${subCommand}`);
   }
 }

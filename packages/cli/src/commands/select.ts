@@ -32,11 +32,11 @@ export async function selectCommand(
 ): Promise<void> {
   // 验证参数
   if (!ref) {
-    throw new Error("缺少 ref 参数");
+    throw new Error("Missing ref argument");
   }
 
   if (value === undefined || value === null) {
-    throw new Error("缺少 value 参数");
+    throw new Error("Missing value argument");
   }
 
   // 确保 Daemon 运行
@@ -67,17 +67,17 @@ export async function selectCommand(
       const selectedValue = response.data?.selectedValue;
       const selectedLabel = response.data?.selectedLabel;
       if (name) {
-        console.log(`已选择: ${role} "${name}"`);
+        console.log(`Selected: ${role} "${name}"`);
       } else {
-        console.log(`已选择: ${role}`);
+        console.log(`Selected: ${role}`);
       }
       if (selectedLabel && selectedLabel !== selectedValue) {
-        console.log(`选项: "${selectedLabel}" (value="${selectedValue}")`);
+        console.log(`Option: "${selectedLabel}" (value="${selectedValue}")`);
       } else {
-        console.log(`选项: "${selectedValue}"`);
+        console.log(`Option: "${selectedValue}"`);
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

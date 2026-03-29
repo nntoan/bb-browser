@@ -40,9 +40,9 @@ export async function traceCommand(
   switch (subCommand) {
     case "start": {
       const status = data?.traceStatus;
-      console.log("开始录制用户操作");
-      console.log(`标签页 ID: ${status?.tabId || 'N/A'}`);
-      console.log("\n在浏览器中进行操作，完成后运行 'bb-browser trace stop' 停止录制");
+      console.log("Started recording user actions");
+      console.log(`Tab ID: ${status?.tabId || 'N/A'}`);
+      console.log("\nPerform actions in the browser, then run 'bb-browser trace stop' to stop recording");
       break;
     }
 
@@ -50,10 +50,10 @@ export async function traceCommand(
       const events = data?.traceEvents || [];
       const status = data?.traceStatus;
       
-      console.log(`录制完成，共 ${events.length} 个事件\n`);
+      console.log(`Recording complete, total ${events.length} events\n`);
       
       if (events.length === 0) {
-        console.log("没有录制到任何操作");
+        console.log("No recorded actions");
         break;
       }
       
@@ -64,47 +64,47 @@ export async function traceCommand(
         
         switch (event.type) {
           case 'navigation':
-            console.log(`${i + 1}. 导航到: ${event.url}`);
+            console.log(`${i + 1}. Navigate to: ${event.url}`);
             break;
           case 'click':
-            console.log(`${i + 1}. 点击 ${refStr} [${event.elementRole}] "${event.elementName || ''}"`);
+            console.log(`${i + 1}. Click ${refStr} [${event.elementRole}] "${event.elementName || ''}"`);
             break;
           case 'fill':
-            console.log(`${i + 1}. 填充 ${refStr} [${event.elementRole}] "${event.elementName || ''}" <- "${event.value}"`);
+            console.log(`${i + 1}. Fill ${refStr} [${event.elementRole}] "${event.elementName || ''}" <- "${event.value}"`);
             break;
           case 'select':
-            console.log(`${i + 1}. 选择 ${refStr} [${event.elementRole}] "${event.elementName || ''}" <- "${event.value}"`);
+            console.log(`${i + 1}. Select ${refStr} [${event.elementRole}] "${event.elementName || ''}" <- "${event.value}"`);
             break;
           case 'check':
-            console.log(`${i + 1}. ${event.checked ? '勾选' : '取消勾选'} ${refStr} [${event.elementRole}] "${event.elementName || ''}"`);
+            console.log(`${i + 1}. ${event.checked ? 'Check' : 'Uncheck'} ${refStr} [${event.elementRole}] "${event.elementName || ''}"`);
             break;
           case 'press':
-            console.log(`${i + 1}. 按键 ${event.key}`);
+            console.log(`${i + 1}. Key ${event.key}`);
             break;
           case 'scroll':
-            console.log(`${i + 1}. 滚动 ${event.direction} ${event.pixels}px`);
+            console.log(`${i + 1}. Scroll ${event.direction} ${event.pixels}px`);
             break;
           default:
             console.log(`${i + 1}. ${event.type}`);
         }
       }
       
-      console.log(`\n状态: ${status?.recording ? '录制中' : '已停止'}`);
+      console.log(`\nStatus: ${status?.recording ? 'recording' : 'stopped'}`);
       break;
     }
 
     case "status": {
       const status = data?.traceStatus;
       if (status?.recording) {
-        console.log(`录制中 (标签页 ${status.tabId})`);
-        console.log(`已录制 ${status.eventCount} 个事件`);
+        console.log(`Recording (tab ${status.tabId})`);
+        console.log(`Recorded ${status.eventCount} events`);
       } else {
-        console.log("未在录制");
+        console.log("Not recording");
       }
       break;
     }
 
     default:
-      throw new Error(`未知的 trace 子命令: ${subCommand}`);
+      throw new Error(`Unknown trace subcommand: ${subCommand}`);
   }
 }

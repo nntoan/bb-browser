@@ -47,7 +47,7 @@ export async function pressCommand(
 ): Promise<void> {
   // 验证参数
   if (!keyString) {
-    throw new Error("缺少 key 参数");
+    throw new Error("Missing key argument");
   }
 
   // 确保 Daemon 运行
@@ -57,7 +57,7 @@ export async function pressCommand(
   const { key, modifiers } = parseKey(keyString);
 
   if (!key) {
-    throw new Error("无效的按键格式");
+    throw new Error("Invalid key format");
   }
 
   // 构造请求
@@ -78,9 +78,9 @@ export async function pressCommand(
   } else {
     if (response.success) {
       const displayKey = modifiers.length > 0 ? `${modifiers.join("+")}+${key}` : key;
-      console.log(`已按下: ${displayKey}`);
+      console.log(`Pressed: ${displayKey}`);
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

@@ -32,7 +32,7 @@ export async function checkCommand(
   options: CheckOptions = {}
 ): Promise<void> {
   if (!ref) {
-    throw new Error("缺少 ref 参数");
+    throw new Error("Missing ref argument");
   }
 
   await ensureDaemonRunning();
@@ -58,19 +58,19 @@ export async function checkCommand(
       
       if (wasAlreadyChecked) {
         if (name) {
-          console.log(`已勾选（之前已勾选）: ${role} "${name}"`);
+          console.log(`Checked (already checked): ${role} "${name}"`);
         } else {
-          console.log(`已勾选（之前已勾选）: ${role}`);
+          console.log(`Checked (already checked): ${role}`);
         }
       } else {
         if (name) {
-          console.log(`已勾选: ${role} "${name}"`);
+          console.log(`Checked: ${role} "${name}"`);
         } else {
-          console.log(`已勾选: ${role}`);
+          console.log(`Checked: ${role}`);
         }
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }
@@ -84,7 +84,7 @@ export async function uncheckCommand(
   options: CheckOptions = {}
 ): Promise<void> {
   if (!ref) {
-    throw new Error("缺少 ref 参数");
+    throw new Error("Missing ref argument");
   }
 
   await ensureDaemonRunning();
@@ -110,19 +110,19 @@ export async function uncheckCommand(
       
       if (wasAlreadyUnchecked) {
         if (name) {
-          console.log(`已取消勾选（之前未勾选）: ${role} "${name}"`);
+          console.log(`Unchecked (already unchecked): ${role} "${name}"`);
         } else {
-          console.log(`已取消勾选（之前未勾选）: ${role}`);
+          console.log(`Unchecked (already unchecked): ${role}`);
         }
       } else {
         if (name) {
-          console.log(`已取消勾选: ${role} "${name}"`);
+          console.log(`Unchecked: ${role} "${name}"`);
         } else {
-          console.log(`已取消勾选: ${role}`);
+          console.log(`Unchecked: ${role}`);
         }
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

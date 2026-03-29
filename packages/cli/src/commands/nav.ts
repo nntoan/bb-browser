@@ -35,12 +35,12 @@ export async function backCommand(options: NavOptions = {}): Promise<void> {
     if (response.success) {
       const url = response.data?.url ?? "";
       if (url) {
-        console.log(`后退至: ${url}`);
+        console.log(`Navigated back to: ${url}`);
       } else {
-        console.log("已后退");
+        console.log("Navigated back");
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }
@@ -66,12 +66,12 @@ export async function forwardCommand(options: NavOptions = {}): Promise<void> {
     if (response.success) {
       const url = response.data?.url ?? "";
       if (url) {
-        console.log(`前进至: ${url}`);
+        console.log(`Navigated forward to: ${url}`);
       } else {
-        console.log("已前进");
+        console.log("Navigated forward");
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }
@@ -97,12 +97,12 @@ export async function refreshCommand(options: NavOptions = {}): Promise<void> {
     if (response.success) {
       const title = response.data?.title ?? "";
       if (title) {
-        console.log(`已刷新: "${title}"`);
+        console.log(`Refreshed: "${title}"`);
       } else {
-        console.log("已刷新页面");
+        console.log("Refreshed page");
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

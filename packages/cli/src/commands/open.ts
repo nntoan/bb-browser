@@ -23,7 +23,7 @@ export async function openCommand(
 ): Promise<void> {
   // 验证 URL
   if (!url) {
-    throw new Error("缺少 URL 参数");
+    throw new Error("Missing URL argument");
   }
 
   // 确保 Daemon 运行
@@ -51,7 +51,7 @@ export async function openCommand(
       // 使用指定 tabId
       const tabId = parseInt(options.tab, 10);
       if (isNaN(tabId)) {
-        throw new Error(`无效的 tabId: ${options.tab}`);
+        throw new Error(`Invalid tabId: ${options.tab}`);
       }
       (request as Record<string, unknown>).tabId = tabId;
     }
@@ -66,9 +66,9 @@ export async function openCommand(
     console.log(JSON.stringify(response, null, 2));
   } else {
     if (response.success) {
-      console.log(`已打开: ${response.data?.url ?? normalizedUrl}`);
+      console.log(`Opened: ${response.data?.url ?? normalizedUrl}`);
       if (response.data?.title) {
-        console.log(`标题: ${response.data.title}`);
+        console.log(`Title: ${response.data.title}`);
       }
       if (response.data?.tabId) {
         console.log(`Tab ID: ${response.data.tabId}`);
@@ -79,7 +79,7 @@ export async function openCommand(
         console.log(`\n💡 ${siteHint}`);
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

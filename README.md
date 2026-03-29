@@ -191,6 +191,59 @@ bb-browser CLI ──HTTP──▶ Daemon ──SSE──▶ Chrome Extension
                                          Your Real Browser
 ```
 
+## Fork sync strategy for English-localized forks
+
+If your fork keeps English runtime text while upstream still updates Chinese text, avoid direct long-lived manual edits during every sync.
+
+This repo includes an overlay-based approach:
+
+1. Merge upstream first.
+2. Re-apply English string overlay (`pnpm overlay:english`).
+3. Validate (`pnpm lint && pnpm test`).
+4. Push sync result.
+
+The overlay rules live in:
+- `tools/english-overlay/rules.json`
+- `tools/english-overlay/apply.mjs`
+
+For automation, use workflow:
+- `.github/workflows/sync-upstream-overlay.yml`
+
+This reduces merge conflicts because your localization is generated after merge, not hand-resolved in every conflicting hunk.
+
+Example conflict pattern and resolution:
+
+- Upstream changes:
+  - `"错误：缺少 URL 参数"` → `"错误：缺少 url 参数（必填）"`
+- Fork direct-edit approach:
+  - same line was changed to `"Error: missing URL argument"`
+  - next upstream merge can conflict on this hunk.
+- Overlay approach:
+  1. merge upstream Chinese changes first
+  2. run `pnpm overlay:english`
+  3. overlay rewrites to your English form again
+
+This keeps sync friction low and avoids repeated manual conflict resolution on translated strings.
+
+## Publish release to your own npm registry (forks)
+
+Workflow `.github/workflows/publish.yml` now supports custom registry publish.
+
+Manual run (`workflow_dispatch`) inputs:
+- `tag_name` (required)
+- `registry_url` (default: `https://registry.npmjs.org`)
+- `dist_tag` (default: `latest`)
+
+Set one of these secrets in your fork:
+- `NPM_TOKEN` (preferred)
+- or `NODE_AUTH_TOKEN`
+
+Examples:
+- npmjs: `registry_url=https://registry.npmjs.org`
+- GitHub Packages: `registry_url=https://npm.pkg.github.com`
+
+If your registry requires scoped packages, update `name` in `package.json` (for example `@your-scope/bb-browser`) before publishing.
+
 ## License
 
 [MIT](LICENSE)

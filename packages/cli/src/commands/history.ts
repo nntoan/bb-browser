@@ -37,18 +37,18 @@ export async function historyCommand(
     case "search": {
       const items = data?.historyItems || [];
 
-      console.log(`找到 ${items.length} 条历史记录\n`);
+      console.log(`Found ${items.length} history entries\n`);
 
       if (items.length === 0) {
-        console.log("没有找到匹配的历史记录");
+        console.log("No matching history entries found");
         break;
       }
 
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
-        console.log(`${i + 1}. ${item.title || '(无标题)'}`);
+        console.log(`${i + 1}. ${item.title || '(untitled)'}`);
         console.log(`   ${item.url}`);
-        console.log(`   访问次数: ${item.visitCount}`);
+        console.log(`   Visit count: ${item.visitCount}`);
       }
       break;
     }
@@ -56,22 +56,22 @@ export async function historyCommand(
     case "domains": {
       const domains = data?.historyDomains || [];
 
-      console.log(`找到 ${domains.length} 个域名\n`);
+      console.log(`Found ${domains.length} domains\n`);
 
       if (domains.length === 0) {
-        console.log("没有找到历史记录");
+        console.log("No history records found");
         break;
       }
 
       for (let i = 0; i < domains.length; i++) {
         const domain = domains[i];
         console.log(`${i + 1}. ${domain.domain}`);
-        console.log(`   访问次数: ${domain.visits}`);
+        console.log(`   Visit count: ${domain.visits}`);
       }
       break;
     }
 
     default:
-      throw new Error(`未知的 history 子命令: ${subCommand}`);
+      throw new Error(`Unknown history subcommand: ${subCommand}`);
   }
 }
