@@ -78,13 +78,13 @@ export async function screenshotCommand(
         base64: dataUrl,
       }, null, 2));
     } else {
-      console.log(`截图已保存: ${filePath}`);
+      console.log(`Screenshot saved: ${filePath}`);
     }
   } else {
     if (options.json) {
       console.log(JSON.stringify(response, null, 2));
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
     }
     process.exit(1);
   }

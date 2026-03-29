@@ -23,7 +23,7 @@ export async function frameCommand(
   options: FrameOptions = {}
 ): Promise<void> {
   if (!selector) {
-    throw new Error("缺少 selector 参数");
+    throw new Error("Missing selector argument");
   }
 
   await ensureDaemonRunning();
@@ -43,12 +43,12 @@ export async function frameCommand(
     if (response.success) {
       const frameInfo = response.data?.frameInfo;
       if (frameInfo?.url) {
-        console.log(`已切换到 frame: ${selector} (${frameInfo.url})`);
+        console.log(`Switched to frame: ${selector} (${frameInfo.url})`);
       } else {
-        console.log(`已切换到 frame: ${selector}`);
+        console.log(`Switched to frame: ${selector}`);
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }
@@ -74,9 +74,9 @@ export async function frameMainCommand(
     console.log(JSON.stringify(response, null, 2));
   } else {
     if (response.success) {
-      console.log("已返回主 frame");
+      console.log("Returned to main frame");
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

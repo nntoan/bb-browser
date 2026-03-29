@@ -27,12 +27,12 @@ export async function scrollCommand(
 ): Promise<void> {
   // 验证 direction
   if (!direction) {
-    throw new Error("缺少 direction 参数");
+    throw new Error("Missing direction argument");
   }
 
   if (!VALID_DIRECTIONS.includes(direction as ScrollDirection)) {
     throw new Error(
-      `无效的滚动方向: ${direction}，支持: ${VALID_DIRECTIONS.join(", ")}`
+      `Invalid scroll direction: ${direction}, supported: ${VALID_DIRECTIONS.join(", ")}`
     );
   }
 
@@ -41,7 +41,7 @@ export async function scrollCommand(
   if (pixels !== undefined) {
     pixelValue = parseInt(pixels, 10);
     if (isNaN(pixelValue) || pixelValue <= 0) {
-      throw new Error(`无效的像素值: ${pixels}`);
+      throw new Error(`Invalid pixel value: ${pixels}`);
     }
   }
 
@@ -65,9 +65,9 @@ export async function scrollCommand(
     console.log(JSON.stringify(response, null, 2));
   } else {
     if (response.success) {
-      console.log(`已滚动: ${direction} ${pixelValue}px`);
+      console.log(`Scrolled: ${direction} ${pixelValue}px`);
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

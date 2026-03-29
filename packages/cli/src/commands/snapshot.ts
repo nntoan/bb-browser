@@ -45,15 +45,15 @@ export async function snapshotCommand(
     console.log(JSON.stringify(response, null, 2));
   } else {
     if (response.success) {
-      console.log(`标题: ${response.data?.title ?? "(无标题)"}`);
-      console.log(`URL: ${response.data?.url ?? "(未知)"}`);
+      console.log(`Title: ${response.data?.title ?? "(untitled)"}`);
+      console.log(`URL: ${response.data?.url ?? "(unknown)"}`);
       // 输出 snapshot 文本
       if (response.data?.snapshotData?.snapshot) {
         console.log("");
         console.log(response.data.snapshotData.snapshot);
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

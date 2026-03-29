@@ -29,7 +29,7 @@ export async function clickCommand(
 ): Promise<void> {
   // 验证 ref
   if (!ref) {
-    throw new Error("缺少 ref 参数");
+    throw new Error("Missing ref argument");
   }
 
   // 确保 Daemon 运行
@@ -57,12 +57,12 @@ export async function clickCommand(
       const role = response.data?.role ?? "element";
       const name = response.data?.name;
       if (name) {
-        console.log(`已点击: ${role} "${name}"`);
+        console.log(`Clicked: ${role} "${name}"`);
       } else {
-        console.log(`已点击: ${role}`);
+        console.log(`Clicked: ${role}`);
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

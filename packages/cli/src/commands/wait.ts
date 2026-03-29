@@ -15,7 +15,7 @@ export interface WaitOptions {
 }
 
 /**
- * 判断是否是等待时间（纯数字）
+ * 判断yesnoyes等待时间（纯数字）
  */
 function isTimeWait(target: string): boolean {
   return /^\d+$/.test(target);
@@ -33,7 +33,7 @@ export async function waitCommand(
   options: WaitOptions = {}
 ): Promise<void> {
   if (!target) {
-    throw new Error("缺少等待目标参数");
+    throw new Error("Missing wait target argument");
   }
 
   // 确保 Daemon 运行
@@ -72,12 +72,12 @@ export async function waitCommand(
   } else {
     if (response.success) {
       if (isTimeWait(target)) {
-        console.log(`已等待 ${target}ms`);
+        console.log(`Waited ${target}ms`);
       } else {
-        console.log(`元素 @${parseRef(target)} 已出现`);
+        console.log(`Element @${parseRef(target)} is now visible`);
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

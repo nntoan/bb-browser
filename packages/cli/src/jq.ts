@@ -42,7 +42,7 @@ function applySegment(inputs: unknown[], expr: string): unknown[] {
   if (expr === ".") return inputs;
   if (expr.startsWith("select(")) {
     const match = expr.match(/^select\((.+?)\s*(==|>)\s*(.+)\)$/);
-    if (!match) throw new Error(`不支持的 jq 表达式: ${expr}`);
+    if (!match) throw new Error(`Unsupported jq expression: ${expr}`);
     const [, leftExpr, op, rightExpr] = match;
     const expected = parseLiteral(rightExpr);
     return inputs.filter((item) => {
@@ -70,7 +70,7 @@ function applySegment(inputs: unknown[], expr: string): unknown[] {
       return obj;
     });
   }
-  if (!expr.startsWith(".")) throw new Error(`不支持的 jq 表达式: ${expr}`);
+  if (!expr.startsWith(".")) throw new Error(`Unsupported jq expression: ${expr}`);
 
   let current = inputs;
   let remaining = expr.slice(1);
@@ -80,7 +80,7 @@ function applySegment(inputs: unknown[], expr: string): unknown[] {
       remaining = remaining.slice(2);
     } else if (remaining.startsWith("[")) {
       const match = remaining.match(/^\[(-?\d+)\]/);
-      if (!match) throw new Error(`不支持的 jq 表达式: .${remaining}`);
+      if (!match) throw new Error(`Unsupported jq expression: .${remaining}`);
       const index = Number(match[1]);
       current = current.map((item) => {
         if (!Array.isArray(item)) return undefined;
@@ -91,7 +91,7 @@ function applySegment(inputs: unknown[], expr: string): unknown[] {
       remaining = remaining.slice(1);
     } else {
       const match = remaining.match(/^([A-Za-z_][A-Za-z0-9_]*)/);
-      if (!match) throw new Error(`不支持的 jq 表达式: .${remaining}`);
+      if (!match) throw new Error(`Unsupported jq expression: .${remaining}`);
       const field = match[1];
       current = current.map((item) => getField(item, field));
       remaining = remaining.slice(field.length);

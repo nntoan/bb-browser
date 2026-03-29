@@ -19,7 +19,7 @@ const DEFAULT_PINIX_URL = "http://127.0.0.1:9000";
 const DEFAULT_CLIP_NAME = "browser";
 const PROVIDER_NAME_PREFIX = "bb-browserd";
 const CLIP_PACKAGE = "browser";
-const CLIP_DOMAIN = "浏览器";
+const CLIP_DOMAIN = "browser";
 const RECONNECT_DELAY_MS = 5000;
 const REGISTER_TIMEOUT_MS = 10000;
 const HEARTBEAT_INTERVAL_MS = 15000;
@@ -241,15 +241,15 @@ class AsyncMessageQueue<T> implements AsyncIterable<T>, AsyncIterator<T> {
 const COMMAND_REGISTRATIONS: Record<CapabilityCommand, CommandRegistration> = {
   navigate: {
     name: "navigate",
-    description: "打开页面",
+    description: "Open page",
     input: {
       type: "object",
       properties: {
-        url: { type: "string", description: "目标 URL" },
+        url: { type: "string", description: "Target URL" },
         waitUntil: {
           type: "string",
           enum: ["load", "domcontentloaded", "networkidle"],
-          description: "等待策略（当前仅作兼容保留）",
+          description: "Wait strategy (currently kept for compatibility)",
         },
       },
       required: ["url"],
@@ -267,11 +267,11 @@ const COMMAND_REGISTRATIONS: Record<CapabilityCommand, CommandRegistration> = {
   },
   click: {
     name: "click",
-    description: "点击元素",
+    description: "Click element",
     input: {
       type: "object",
       properties: {
-        selector: { type: "string", description: "CSS 选择器" },
+        selector: { type: "string", description: "CSS selector" },
       },
       required: ["selector"],
       additionalProperties: true,
@@ -283,13 +283,13 @@ const COMMAND_REGISTRATIONS: Record<CapabilityCommand, CommandRegistration> = {
   },
   type: {
     name: "type",
-    description: "向输入框追加文本",
+    description: "Append text to input",
     input: {
       type: "object",
       properties: {
-        selector: { type: "string", description: "CSS 选择器" },
-        text: { type: "string", description: "要输入的文本" },
-        delay: { type: "number", description: "字符延迟（当前忽略）" },
+        selector: { type: "string", description: "CSS selector" },
+        text: { type: "string", description: "Text to type" },
+        delay: { type: "number", description: "Character delay (currently ignored)" },
       },
       required: ["selector", "text"],
       additionalProperties: true,
@@ -301,11 +301,11 @@ const COMMAND_REGISTRATIONS: Record<CapabilityCommand, CommandRegistration> = {
   },
   evaluate: {
     name: "evaluate",
-    description: "执行页面 JavaScript",
+    description: "Execute page JavaScript",
     input: {
       type: "object",
       properties: {
-        js: { type: "string", description: "要执行的 JavaScript" },
+        js: { type: "string", description: "JavaScript to execute" },
       },
       required: ["js"],
       additionalProperties: true,
@@ -321,18 +321,18 @@ const COMMAND_REGISTRATIONS: Record<CapabilityCommand, CommandRegistration> = {
   },
   screenshot: {
     name: "screenshot",
-    description: "截取当前页面 PNG",
+    description: "Capture current page as PNG",
     input: {
       type: "object",
       properties: {
-        fullPage: { type: "boolean", description: "整页截图（当前忽略）" },
+        fullPage: { type: "boolean", description: "Full-page screenshot (currently ignored)" },
       },
       additionalProperties: true,
     },
     output: {
       type: "object",
       properties: {
-        base64: { type: "string", description: "PNG base64 数据" },
+        base64: { type: "string", description: "PNG base64 data" },
       },
       required: ["base64"],
       additionalProperties: false,
@@ -340,7 +340,7 @@ const COMMAND_REGISTRATIONS: Record<CapabilityCommand, CommandRegistration> = {
   },
   getCookies: {
     name: "getCookies",
-    description: "读取当前页面 Cookie",
+    description: "Read current page cookies",
     input: {
       type: "object",
       additionalProperties: true,
@@ -369,12 +369,12 @@ const COMMAND_REGISTRATIONS: Record<CapabilityCommand, CommandRegistration> = {
   },
   waitForSelector: {
     name: "waitForSelector",
-    description: "等待元素出现",
+    description: "Wait for element",
     input: {
       type: "object",
       properties: {
-        selector: { type: "string", description: "CSS 选择器" },
-        timeout: { type: "number", description: "超时时间（毫秒）" },
+        selector: { type: "string", description: "CSS selector" },
+        timeout: { type: "number", description: "Timeout (milliseconds)" },
       },
       required: ["selector"],
       additionalProperties: true,

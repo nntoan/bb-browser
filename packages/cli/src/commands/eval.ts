@@ -18,7 +18,7 @@ export async function evalCommand(
 ): Promise<void> {
   // 验证 script
   if (!script) {
-    throw new Error("缺少 script 参数");
+    throw new Error("Missing script argument");
   }
 
   // 确保 Daemon 运行
@@ -42,7 +42,7 @@ export async function evalCommand(
     if (response.success) {
       const result = response.data?.result;
       if (result !== undefined) {
-        // 如果结果是对象，格式化输出
+        // 如果结果yes对象，格式化输出
         if (typeof result === "object" && result !== null) {
           console.log(JSON.stringify(result, null, 2));
         } else {
@@ -52,7 +52,7 @@ export async function evalCommand(
         console.log("undefined");
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

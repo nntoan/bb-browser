@@ -36,7 +36,7 @@ function parseTabSubcommand(args: string[], rawArgv?: string[]): {
     if (idIdx >= 0 && rawArgv[idIdx + 1]) {
       tabId = parseInt(rawArgv[idIdx + 1], 10);
       if (isNaN(tabId)) {
-        throw new Error(`无效的 tabId: ${rawArgv[idIdx + 1]}`);
+        throw new Error(`Invalid tabId: ${rawArgv[idIdx + 1]}`);
       }
     }
   }
@@ -62,7 +62,7 @@ function parseTabSubcommand(args: string[], rawArgv?: string[]): {
     if (tabId !== undefined) {
       return { action: "tab_select", tabId };
     }
-    throw new Error("tab select 需要 --id 参数，用法：bb-browser tab select --id <tabId>");
+    throw new Error("tab select requires --id argument. Usage: bb-browser tab select --id <tabId>");
   }
 
   // tab close [n | --id <tabId>]
@@ -74,7 +74,7 @@ function parseTabSubcommand(args: string[], rawArgv?: string[]): {
     if (indexArg !== undefined) {
       const index = parseInt(indexArg, 10);
       if (isNaN(index) || index < 0) {
-        throw new Error(`无效的标签页索引: ${indexArg}`);
+        throw new Error(`Invalid tab index: ${indexArg}`);
       }
       return { action: "tab_close", index };
     }
@@ -87,7 +87,7 @@ function parseTabSubcommand(args: string[], rawArgv?: string[]): {
     return { action: "tab_select", index };
   }
 
-  throw new Error(`未知的 tab 子命令: ${first}`);
+  throw new Error(`Unknown tab subcommand: ${first}`);
 }
 
 /**
@@ -95,11 +95,11 @@ function parseTabSubcommand(args: string[], rawArgv?: string[]): {
  */
 function formatTabList(tabs: TabInfo[], activeIndex: number): string {
   const lines: string[] = [];
-  lines.push(`标签页列表（共 ${tabs.length} 个，当前 #${activeIndex}）：`);
+  lines.push(`Tab list (${tabs.length} total, current #${activeIndex}):`);
 
   for (const tab of tabs) {
     const prefix = tab.active ? "*" : " ";
-    const title = tab.title || "(无标题)";
+    const title = tab.title || "(untitled)";
     lines.push(`${prefix} [${tab.index}] ${tab.url} - ${title}`);
   }
 
@@ -142,24 +142,24 @@ export async function tabCommand(
         }
         case "tab_new": {
           const url = response.data?.url ?? "about:blank";
-          console.log(`已创建新标签页: ${url}`);
+          console.log(`Created new tab: ${url}`);
           break;
         }
         case "tab_select": {
-          const title = response.data?.title ?? "(无标题)";
+          const title = response.data?.title ?? "(untitled)";
           const url = response.data?.url ?? "";
-          console.log(`已切换到标签页 #${parsed.index}: ${title}`);
+          console.log(`Switched to tab #${parsed.index}: ${title}`);
           console.log(`  URL: ${url}`);
           break;
         }
         case "tab_close": {
-          const closedTitle = response.data?.title ?? "(无标题)";
-          console.log(`已关闭标签页: ${closedTitle}`);
+          const closedTitle = response.data?.title ?? "(untitled)";
+          console.log(`Closed tab: ${closedTitle}`);
           break;
         }
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

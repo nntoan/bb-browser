@@ -1,5 +1,5 @@
 /**
- * dialog 命令 - 处理浏览器对话框（alert/confirm/prompt）
+ * dialog 命令 - 处理浏览器dialog (alert/confirm/prompt）
  * 用法：
  *   bb-browser dialog accept [text]  接受对话框，可传入 prompt 文本
  *   bb-browser dialog dismiss        拒绝/关闭对话框
@@ -21,7 +21,7 @@ export async function dialogCommand(
 ): Promise<void> {
   // 验证子命令
   if (!subCommand || !["accept", "dismiss"].includes(subCommand)) {
-    throw new Error("请使用 'dialog accept [text]' 或 'dialog dismiss'");
+    throw new Error("Use 'dialog accept [text]' or 'dialog dismiss'");
   }
 
   // 确保 Daemon 运行
@@ -46,13 +46,13 @@ export async function dialogCommand(
     if (response.success) {
       const dialogInfo = response.data?.dialogInfo;
       if (dialogInfo) {
-        const action = subCommand === "accept" ? "已接受" : "已拒绝";
-        console.log(`${action}对话框（${dialogInfo.type}）: "${dialogInfo.message}"`);
+        const action = subCommand === "accept" ? "Accepted " : "Dismissed ";
+        console.log(`${action}dialog (${dialogInfo.type} ): "${dialogInfo.message}"`);
       } else {
-        console.log("对话框已处理");
+        console.log("Dialog handled");
       }
     } else {
-      console.error(`错误: ${response.error}`);
+      console.error(`Error: ${response.error}`);
       process.exit(1);
     }
   }

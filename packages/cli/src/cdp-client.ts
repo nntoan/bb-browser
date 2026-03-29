@@ -959,7 +959,7 @@ export async function ensureCdpConnection(): Promise<void> {
 export async function sendCommand(request: Request): Promise<Response> {
   try {
     await ensureCdpConnection();
-    const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new Error("请求超时")), COMMAND_TIMEOUT));
+    const timeout = new Promise<never>((_, reject) => setTimeout(() => reject(new Error("Request timed out")), COMMAND_TIMEOUT));
     return await Promise.race([dispatchRequest(request), timeout]);
   } catch (error) {
     return fail(request.id, error);
@@ -1117,12 +1117,12 @@ async function dispatchRequest(request: Request): Promise<Response> {
       if (!request.selector) return fail(request.id, "Missing selector parameter");
       const document = await pageCommand<{ root: { nodeId: number } }>(target.id, "DOM.getDocument", {});
       const node = await pageCommand<{ nodeId: number }>(target.id, "DOM.querySelector", { nodeId: document.root.nodeId, selector: request.selector });
-      if (!node.nodeId) return fail(request.id, `找不到 iframe: ${request.selector}`);
+      if (!node.nodeId) return fail(request.id, `iframe not found: ${request.selector}`);
       const described = await pageCommand<{ node: { frameId?: string; nodeName?: string; attributes?: string[] } }>(target.id, "DOM.describeNode", { nodeId: node.nodeId });
       const frameId = described.node.frameId;
       const nodeName = String(described.node.nodeName ?? "").toLowerCase();
-      if (!frameId) return fail(request.id, `无法获取 iframe frameId: ${request.selector}`);
-      if (nodeName && nodeName !== "iframe" && nodeName !== "frame") return fail(request.id, `元素不是 iframe: ${nodeName}`);
+      if (!frameId) return fail(request.id, `Unable to get iframe frameId: ${request.selector}`);
+      if (nodeName && nodeName !== "iframe" && nodeName !== "frame") return fail(request.id, `Element is not an iframe: ${nodeName}`);
       connectionState?.activeFrameIdByTarget.set(target.id, frameId);
       const attributes = described.node.attributes ?? [];
       const attrMap: Record<string, string> = {};

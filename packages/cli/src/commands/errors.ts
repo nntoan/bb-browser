@@ -29,27 +29,27 @@ export async function errorsCommand(options: ErrorsOptions = {}): Promise<void> 
   }
 
   if (options.clear) {
-    console.log("已清空 JS 错误记录");
+    console.log("Cleared JS error records");
     return;
   }
 
   const errors = response.data?.jsErrors || [];
   
   if (errors.length === 0) {
-    console.log("没有 JS 错误");
-    console.log("提示: errors 命令会自动开始监控");
+    console.log("No JS errors");
+    console.log("Tip: errors command starts monitoring automatically");
     return;
   }
 
-  console.log(`JS 错误 (${errors.length} 条):\n`);
+  console.log(`JS errors (${errors.length} items):\n`);
 
   for (const err of errors) {
     console.log(`[ERROR] ${err.message}`);
     if (err.url) {
-      console.log(`  位置: ${err.url}:${err.lineNumber || 0}:${err.columnNumber || 0}`);
+      console.log(`  Location: ${err.url}:${err.lineNumber || 0}:${err.columnNumber || 0}`);
     }
     if (err.stackTrace) {
-      console.log(`  堆栈:`);
+      console.log(`  Stack trace:`);
       console.log(err.stackTrace.split('\n').map(line => `    ${line}`).join('\n'));
     }
     console.log("");

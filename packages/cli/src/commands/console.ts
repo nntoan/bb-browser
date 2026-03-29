@@ -29,19 +29,19 @@ export async function consoleCommand(options: ConsoleOptions = {}): Promise<void
   }
 
   if (options.clear) {
-    console.log("已清空控制台消息");
+    console.log("Cleared console messages");
     return;
   }
 
   const messages = response.data?.consoleMessages || [];
   
   if (messages.length === 0) {
-    console.log("没有控制台消息");
-    console.log("提示: console 命令会自动开始监控");
+    console.log("No console messages");
+    console.log("Tip: console command starts monitoring automatically");
     return;
   }
 
-  console.log(`控制台消息 (${messages.length} 条):\n`);
+  console.log(`Console messages (${messages.length} items):\n`);
 
   const typeColors: Record<string, string> = {
     log: "",

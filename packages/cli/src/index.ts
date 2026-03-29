@@ -37,73 +37,73 @@ declare const __BB_BROWSER_VERSION__: string;
 const VERSION = __BB_BROWSER_VERSION__;
 
 const HELP_TEXT = `
-bb-browser - AI Agent 浏览器自动化工具
+bb-browser - Browser automation for AI agents
 
-安装：
+Install:
   npm install -g bb-browser
 
-提示：大多数数据获取任务请直接使用 site 命令，无需手动操作浏览器：
-  bb-browser site list                    查看所有可用命令
-  bb-browser site twitter/search "AI"     示例：搜索推文
-  bb-browser site xueqiu/hot-stock 5      示例：获取人气股票
+Tip: For most data-fetch tasks, use site commands directly instead of manual browser actions:
+  bb-browser site list                    List all available adapters
+  bb-browser site twitter/search "AI"     Example: search tweets
+  bb-browser site xueqiu/hot-stock 5      Example: get hot stocks
 
-用法：
+Usage:
   bb-browser <command> [options]
 
-开始使用：
-  site recommend               推荐你可能需要的 adapter（基于浏览历史）
-  site list                    列出所有 adapter
-  site info <name>             查看 adapter 用法（参数、返回值、示例）
-  site <name> [args]           运行 adapter
-  site update                  更新社区 adapter 库
-  guide                        如何把任何网站变成 adapter
+Getting started:
+  site recommend               Recommend adapters based on browsing history
+  site list                    List all adapters
+  site info <name>             Show adapter usage (args, return fields, examples)
+  site <name> [args]           Run adapter
+  site update                  Update community adapter repository
+  guide                        Learn how to turn any website into an adapter
   star                         ⭐ Star bb-browser on GitHub
 
-浏览器操作：
-  open <url> [--tab]           打开 URL
-  snapshot [-i] [-c] [-d <n>]  获取页面快照
-  click <ref>                  点击元素
-  hover <ref>                  悬停元素
-  fill <ref> <text>            填充输入框（清空后填入）
-  type <ref> <text>            逐字符输入（不清空）
-  check/uncheck <ref>          勾选/取消复选框
-  select <ref> <val>           下拉框选择
-  press <key>                  发送按键
-  scroll <dir> [px]            滚动页面
+Browser actions:
+  open <url> [--tab]           Open URL
+  snapshot [-i] [-c] [-d <n>]  Get page snapshot
+  click <ref>                  Click element
+  hover <ref>                  Hover element
+  fill <ref> <text>            Fill input (clear then type)
+  type <ref> <text>            Type character by character (without clearing)
+  check/uncheck <ref>          Check/uncheck checkbox
+  select <ref> <val>           Select dropdown option
+  press <key>                  Send keyboard input
+  scroll <dir> [px]            Scroll page
 
-页面信息：
-  get text|url|title <ref>     获取页面内容
-  screenshot [path]            截图
-  eval "<js>"                  执行 JavaScript
-  fetch <url>                  带登录态的 HTTP 请求
+Page info:
+  get text|url|title <ref>     Get page content
+  screenshot [path]            Take screenshot
+  eval "<js>"                  Execute JavaScript
+  fetch <url>                  HTTP request with browser login state
 
-标签页：
-  tab [list|new|close|<n>]     管理标签页
-  status                       查看受管浏览器状态
+Tabs:
+  tab [list|new|close|<n>]     Manage tabs
+  status                       Show managed browser status
 
-导航：
-  back / forward / refresh     后退 / 前进 / 刷新
+Navigation:
+  back / forward / refresh     Navigate back / forward / refresh
 
-调试：
-  network requests [filter]    查看网络请求
-  console [--clear]            查看/清空控制台
-  errors [--clear]             查看/清空 JS 错误
-  trace start|stop|status      录制用户操作
-  history search|domains       查看浏览历史
+Debugging:
+  network requests [filter]    Show network requests
+  console [--clear]            Show/clear console messages
+  errors [--clear]             Show/clear JS errors
+  trace start|stop|status      Record user actions
+  history search|domains       Show browsing history
 
-选项：
-  --json               以 JSON 格式输出
-  --port <n>           指定 Chrome CDP 端口
-  --openclaw           优先复用 OpenClaw 浏览器实例
-  --jq <expr>          对 JSON 输出应用 jq 过滤（直接作用于数据，跳过 id/success 信封）
-  -i, --interactive    只输出可交互元素（snapshot 命令）
-  -c, --compact        移除空结构节点（snapshot 命令）
-  -d, --depth <n>      限制树深度（snapshot 命令）
-  -s, --selector <sel> 限定 CSS 选择器范围（snapshot 命令）
-  --tab <tabId>        指定操作的标签页 ID
-  --mcp                启动 MCP server（用于 Claude Code / Cursor 等 AI 工具）
-  --help, -h           显示帮助信息
-  --version, -v        显示版本号
+Options:
+  --json               Output as JSON
+  --port <n>           Set Chrome CDP port
+  --openclaw           Prefer reusing OpenClaw browser instance
+  --jq <expr>          Apply jq filter on JSON output (directly on data, skips id/success envelope)
+  -i, --interactive    Output interactive elements only (snapshot)
+  -c, --compact        Remove empty structural nodes (snapshot)
+  -d, --depth <n>      Limit tree depth (snapshot)
+  -s, --selector <sel> Restrict CSS selector scope (snapshot)
+  --tab <tabId>        Specify target tab ID
+  --mcp                Start MCP server (for Claude Code / Cursor and other AI tools)
+  --help, -h           Show help
+  --version, -v        Show version
 `.trim();
 
 interface ParsedArgs {
@@ -248,8 +248,8 @@ async function main(): Promise<void> {
       case "open": {
         const url = parsed.args[0];
         if (!url) {
-          console.error("错误：缺少 URL 参数");
-          console.error("用法：bb-browser open <url> [--tab current|<tabId>]");
+          console.error("Error: missing URL argument");
+          console.error("Usage: bb-browser open <url> [--tab current|<tabId>]");
           process.exit(1);
         }
         // 解析 --tab 参数
@@ -274,9 +274,9 @@ async function main(): Promise<void> {
       case "click": {
         const ref = parsed.args[0];
         if (!ref) {
-          console.error("错误：缺少 ref 参数");
-          console.error("用法：bb-browser click <ref>");
-          console.error("示例：bb-browser click @5");
+          console.error("Error: missing ref argument");
+          console.error("Usage: bb-browser click <ref>");
+          console.error("Example: bb-browser click @5");
           process.exit(1);
         }
         await clickCommand(ref, { json: parsed.flags.json, tabId: globalTabId });
@@ -286,9 +286,9 @@ async function main(): Promise<void> {
       case "hover": {
         const ref = parsed.args[0];
         if (!ref) {
-          console.error("错误：缺少 ref 参数");
-          console.error("用法：bb-browser hover <ref>");
-          console.error("示例：bb-browser hover @5");
+          console.error("Error: missing ref argument");
+          console.error("Usage: bb-browser hover <ref>");
+          console.error("Example: bb-browser hover @5");
           process.exit(1);
         }
         await hoverCommand(ref, { json: parsed.flags.json, tabId: globalTabId });
@@ -298,9 +298,9 @@ async function main(): Promise<void> {
       case "check": {
         const ref = parsed.args[0];
         if (!ref) {
-          console.error("错误：缺少 ref 参数");
-          console.error("用法：bb-browser check <ref>");
-          console.error("示例：bb-browser check @5");
+          console.error("Error: missing ref argument");
+          console.error("Usage: bb-browser check <ref>");
+          console.error("Example: bb-browser check @5");
           process.exit(1);
         }
         await checkCommand(ref, { json: parsed.flags.json, tabId: globalTabId });
@@ -310,9 +310,9 @@ async function main(): Promise<void> {
       case "uncheck": {
         const ref = parsed.args[0];
         if (!ref) {
-          console.error("错误：缺少 ref 参数");
-          console.error("用法：bb-browser uncheck <ref>");
-          console.error("示例：bb-browser uncheck @5");
+          console.error("Error: missing ref argument");
+          console.error("Usage: bb-browser uncheck <ref>");
+          console.error("Example: bb-browser uncheck @5");
           process.exit(1);
         }
         await uncheckCommand(ref, { json: parsed.flags.json, tabId: globalTabId });
@@ -323,15 +323,15 @@ async function main(): Promise<void> {
         const ref = parsed.args[0];
         const text = parsed.args[1];
         if (!ref) {
-          console.error("错误：缺少 ref 参数");
-          console.error("用法：bb-browser fill <ref> <text>");
-          console.error('示例：bb-browser fill @3 "hello world"');
+          console.error("Error: missing ref argument");
+          console.error("Usage: bb-browser fill <ref> <text>");
+          console.error('Example: bb-browser fill @3 "hello world"');
           process.exit(1);
         }
         if (text === undefined) {
-          console.error("错误：缺少 text 参数");
-          console.error("用法：bb-browser fill <ref> <text>");
-          console.error('示例：bb-browser fill @3 "hello world"');
+          console.error("Error: missing text argument");
+          console.error("Usage: bb-browser fill <ref> <text>");
+          console.error('Example: bb-browser fill @3 "hello world"');
           process.exit(1);
         }
         await fillCommand(ref, text, { json: parsed.flags.json, tabId: globalTabId });
@@ -342,15 +342,15 @@ async function main(): Promise<void> {
         const ref = parsed.args[0];
         const text = parsed.args[1];
         if (!ref) {
-          console.error("错误：缺少 ref 参数");
-          console.error("用法：bb-browser type <ref> <text>");
-          console.error('示例：bb-browser type @3 "append text"');
+          console.error("Error: missing ref argument");
+          console.error("Usage: bb-browser type <ref> <text>");
+          console.error('Example: bb-browser type @3 "append text"');
           process.exit(1);
         }
         if (text === undefined) {
-          console.error("错误：缺少 text 参数");
-          console.error("用法：bb-browser type <ref> <text>");
-          console.error('示例：bb-browser type @3 "append text"');
+          console.error("Error: missing text argument");
+          console.error("Usage: bb-browser type <ref> <text>");
+          console.error('Example: bb-browser type @3 "append text"');
           process.exit(1);
         }
         await typeCommand(ref, text, { json: parsed.flags.json, tabId: globalTabId });
@@ -361,15 +361,15 @@ async function main(): Promise<void> {
         const ref = parsed.args[0];
         const value = parsed.args[1];
         if (!ref) {
-          console.error("错误：缺少 ref 参数");
-          console.error("用法：bb-browser select <ref> <value>");
-          console.error('示例：bb-browser select @4 "option1"');
+          console.error("Error: missing ref argument");
+          console.error("Usage: bb-browser select <ref> <value>");
+          console.error('Example: bb-browser select @4 "option1"');
           process.exit(1);
         }
         if (value === undefined) {
-          console.error("错误：缺少 value 参数");
-          console.error("用法：bb-browser select <ref> <value>");
-          console.error('示例：bb-browser select @4 "option1"');
+          console.error("Error: missing value argument");
+          console.error("Usage: bb-browser select <ref> <value>");
+          console.error('Example: bb-browser select @4 "option1"');
           process.exit(1);
         }
         await selectCommand(ref, value, { json: parsed.flags.json, tabId: globalTabId });
@@ -379,9 +379,9 @@ async function main(): Promise<void> {
       case "eval": {
         const script = parsed.args[0];
         if (!script) {
-          console.error("错误：缺少 script 参数");
-          console.error("用法：bb-browser eval <script>");
-          console.error('示例：bb-browser eval "document.title"');
+          console.error("Error: missing script argument");
+          console.error("Usage: bb-browser eval <script>");
+          console.error('Example: bb-browser eval "document.title"');
           process.exit(1);
         }
         await evalCommand(script, { json: parsed.flags.json, tabId: globalTabId });
@@ -391,15 +391,15 @@ async function main(): Promise<void> {
       case "get": {
         const attribute = parsed.args[0] as GetAttribute | undefined;
         if (!attribute) {
-          console.error("错误：缺少属性参数");
-          console.error("用法：bb-browser get <text|url|title> [ref]");
-          console.error("示例：bb-browser get text @5");
+          console.error("Error: missing attribute argument");
+          console.error("Usage: bb-browser get <text|url|title> [ref]");
+          console.error("Example: bb-browser get text @5");
           console.error("      bb-browser get url");
           process.exit(1);
         }
         if (!["text", "url", "title"].includes(attribute)) {
-          console.error(`错误：未知属性 "${attribute}"`);
-          console.error("支持的属性：text, url, title");
+          console.error(`Error: unknown attribute "${attribute}"`);
+          console.error("Supported attributes: text, url, title");
           process.exit(1);
         }
         const ref = parsed.args[1];
@@ -438,9 +438,9 @@ async function main(): Promise<void> {
       case "wait": {
         const target = parsed.args[0];
         if (!target) {
-          console.error("错误：缺少等待目标参数");
-          console.error("用法：bb-browser wait <ms|@ref>");
-          console.error("示例：bb-browser wait 2000");
+          console.error("Error: missing wait target argument");
+          console.error("Usage: bb-browser wait <ms|@ref>");
+          console.error("Example: bb-browser wait 2000");
           console.error("      bb-browser wait @5");
           process.exit(1);
         }
@@ -451,9 +451,9 @@ async function main(): Promise<void> {
       case "press": {
         const key = parsed.args[0];
         if (!key) {
-          console.error("错误：缺少 key 参数");
-          console.error("用法：bb-browser press <key>");
-          console.error("示例：bb-browser press Enter");
+          console.error("Error: missing key argument");
+          console.error("Usage: bb-browser press <key>");
+          console.error("Example: bb-browser press Enter");
           console.error("      bb-browser press Control+a");
           process.exit(1);
         }
@@ -465,9 +465,9 @@ async function main(): Promise<void> {
         const direction = parsed.args[0];
         const pixels = parsed.args[1]; // 传 string，scrollCommand 内部解析
         if (!direction) {
-          console.error("错误：缺少方向参数");
-          console.error("用法：bb-browser scroll <up|down|left|right> [pixels]");
-          console.error("示例：bb-browser scroll down");
+          console.error("Error: missing direction argument");
+          console.error("Usage: bb-browser scroll <up|down|left|right> [pixels]");
+          console.error("Example: bb-browser scroll down");
           console.error("      bb-browser scroll up 500");
           process.exit(1);
         }
@@ -488,9 +488,9 @@ async function main(): Promise<void> {
       case "frame": {
         const selectorOrMain = parsed.args[0];
         if (!selectorOrMain) {
-          console.error("错误：缺少 selector 参数");
-          console.error("用法：bb-browser frame <selector>");
-          console.error('示例：bb-browser frame "iframe#editor"');
+          console.error("Error: missing selector argument");
+          console.error("Usage: bb-browser frame <selector>");
+          console.error('Example: bb-browser frame "iframe#editor"');
           console.error("      bb-browser frame main");
           process.exit(1);
         }
@@ -505,14 +505,14 @@ async function main(): Promise<void> {
       case "dialog": {
         const subCommand = parsed.args[0];
         if (!subCommand) {
-          console.error("错误：缺少子命令");
-          console.error("用法：bb-browser dialog <accept|dismiss> [text]");
-          console.error("示例：bb-browser dialog accept");
+          console.error("Error: missing subcommand");
+          console.error("Usage: bb-browser dialog <accept|dismiss> [text]");
+          console.error("Example: bb-browser dialog accept");
           console.error('      bb-browser dialog accept "my input"');
           console.error("      bb-browser dialog dismiss");
           process.exit(1);
         }
-        const promptText = parsed.args[1]; // accept 时可选的 prompt 文本
+        const promptText = parsed.args[1]; // accept 时optional的 prompt 文本
         await dialogCommand(subCommand, promptText, { json: parsed.flags.json, tabId: globalTabId });
         break;
       }
@@ -544,9 +544,9 @@ async function main(): Promise<void> {
       case "trace": {
         const subCmd = parsed.args[0] as 'start' | 'stop' | 'status' | undefined;
         if (!subCmd || !['start', 'stop', 'status'].includes(subCmd)) {
-          console.error("错误：缺少或无效的子命令");
-          console.error("用法：bb-browser trace <start|stop|status>");
-          console.error("示例：bb-browser trace start");
+          console.error("Error: missing or invalid subcommand");
+          console.error("Usage: bb-browser trace <start|stop|status>");
+          console.error("Example: bb-browser trace start");
           console.error("      bb-browser trace stop");
           console.error("      bb-browser trace status");
           process.exit(1);
@@ -558,9 +558,9 @@ async function main(): Promise<void> {
       case "history": {
         const subCmd = parsed.args[0] as 'search' | 'domains' | undefined;
         if (!subCmd || !['search', 'domains'].includes(subCmd)) {
-          console.error("错误：缺少或无效的子命令");
-          console.error("用法：bb-browser history <search|domains> [query] [--days <n>]");
-          console.error("示例：bb-browser history search github");
+          console.error("Error: missing or invalid subcommand");
+          console.error("Usage: bb-browser history <search|domains> [query] [--days <n>]");
+          console.error("Example: bb-browser history search github");
           console.error("      bb-browser history domains --days 7");
           process.exit(1);
         }
@@ -617,7 +617,7 @@ async function main(): Promise<void> {
         try {
           execSync("gh auth status", { stdio: "pipe" });
         } catch {
-          console.error("需要先安装并登录 GitHub CLI: https://cli.github.com");
+          console.error("Please install and sign in to GitHub CLI first: https://cli.github.com");
           console.error("  brew install gh && gh auth login");
           process.exit(1);
         }
@@ -696,8 +696,8 @@ Full guide:        https://github.com/epiral/bb-sites/blob/main/SKILL.md`);
       }
 
       default: {
-        console.error(`错误：未知命令 "${parsed.command}"`);
-        console.error("运行 bb-browser --help 查看可用命令");
+        console.error(`Error: unknown command "${parsed.command}"`);
+        console.error("Run bb-browser --help to view available commands");
         process.exit(1);
       }
     }
@@ -712,7 +712,7 @@ Full guide:        https://github.com/epiral/bb-sites/blob/main/SKILL.md`);
         })
       );
     } else {
-      console.error(`错误：${message}`);
+      console.error(`Error: ${message}`);
     }
 
     process.exit(1);
