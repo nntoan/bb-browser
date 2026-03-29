@@ -225,6 +225,25 @@ Example conflict pattern and resolution:
 
 This keeps sync friction low and avoids repeated manual conflict resolution on translated strings.
 
+## Publish release to your own npm registry (forks)
+
+Workflow `.github/workflows/publish.yml` now supports custom registry publish.
+
+Manual run (`workflow_dispatch`) inputs:
+- `tag_name` (required)
+- `registry_url` (default: `https://registry.npmjs.org`)
+- `dist_tag` (default: `latest`)
+
+Set one of these secrets in your fork:
+- `NPM_TOKEN` (preferred)
+- or `NODE_AUTH_TOKEN`
+
+Examples:
+- npmjs: `registry_url=https://registry.npmjs.org`
+- GitHub Packages: `registry_url=https://npm.pkg.github.com`
+
+If your registry requires scoped packages, update `name` in `package.json` (for example `@your-scope/bb-browser`) before publishing.
+
 ## License
 
 [MIT](LICENSE)
