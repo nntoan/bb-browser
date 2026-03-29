@@ -211,6 +211,20 @@ For automation, use workflow:
 
 This reduces merge conflicts because your localization is generated after merge, not hand-resolved in every conflicting hunk.
 
+Example conflict pattern and resolution:
+
+- Upstream changes:
+  - `"错误：缺少 URL 参数"` → `"错误：缺少 url 参数（必填）"`
+- Fork direct-edit approach:
+  - same line was changed to `"Error: missing URL argument"`
+  - next upstream merge can conflict on this hunk.
+- Overlay approach:
+  1. merge upstream Chinese changes first
+  2. run `pnpm overlay:english`
+  3. overlay rewrites to your English form again
+
+This keeps sync friction low and avoids repeated manual conflict resolution on translated strings.
+
 ## License
 
 [MIT](LICENSE)

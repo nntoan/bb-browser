@@ -50,7 +50,13 @@ jobs:
         run: |
           BRANCH="${{ inputs.upstream_branch || 'main' }}"
           git merge --no-edit "upstream/${BRANCH}" || {
-            echo "Merge conflict detected. Please resolve manually."
+            echo "Merge conflict detected."
+            echo "Resolve locally with:"
+            echo "  git fetch upstream"
+            echo "  git merge upstream/${BRANCH}"
+            echo "  # resolve conflicts, then:"
+            echo "  pnpm overlay:english && pnpm lint && pnpm test"
+            echo "  git add . && git commit && git push"
             exit 1
           }
 
@@ -60,8 +66,11 @@ jobs:
       - name: Re-apply English overlay
         run: pnpm overlay:english
 
-      - name: Validate
-        run: pnpm lint && pnpm test
+      - name: Validate lint
+        run: pnpm lint
+
+      - name: Validate tests
+        run: pnpm test
 
       - name: Commit if changed
         id: commit

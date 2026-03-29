@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const repoRoot = process.cwd();
+const scriptDir = dirname(fileURLToPath(import.meta.url));
+const repoRoot = resolve(scriptDir, "../..");
 const rulesPath = join(repoRoot, "tools/english-overlay/rules.json");
 const rules = JSON.parse(readFileSync(rulesPath, "utf8"));
 
@@ -13,7 +15,7 @@ for (const fileRule of rules.files) {
   const original = content;
 
   for (const [from, to] of fileRule.replacements) {
-    content = content.split(from).join(to);
+    content = content.replaceAll(from, to);
   }
 
   if (content !== original) {

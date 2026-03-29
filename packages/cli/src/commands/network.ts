@@ -70,7 +70,7 @@ export async function networkCommand(
               console.log(`  Response body: ${preview}`);
             }
             if (req.bodyError) {
-              console.log(`  BodyError: ${req.bodyError}`);
+              console.log(`  Body error: ${req.bodyError}`);
             }
           }
           console.log("");
