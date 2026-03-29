@@ -70,6 +70,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to npm
-        run: pnpm publish --no-git-checks --registry "${{ inputs.registry_url || 'https://registry.npmjs.org' }}" --tag "${{ inputs.dist_tag || 'latest' }}"
+        run: pnpm publish --public --no-git-checks --registry "${{ inputs.registry_url || 'https://registry.npmjs.org' }}" --tag "${{ inputs.dist_tag || 'latest' }}"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.NODE_AUTH_TOKEN }}
